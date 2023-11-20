@@ -1,37 +1,33 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+//SPDX-License-Identifier: Unlicensed
+pragma solidity >=0.8.0;
 
-contract StudentData {
-    // Define a structure to represent student data
-    struct Student {
-        uint256 id;
+contract Student {
+    struct student {
+        uint256 prn;
         string name;
-        uint256 age;
+        string class;
+        string department;
+    }
+    uint256 PRN;
+    mapping(uint256 => student) studentMap;
+
+    function addStudent(
+        string memory name,
+        string memory class,
+        string memory department
+    ) public {
+        PRN += 1;
+        studentMap[PRN] = student(PRN, name, class, department);
     }
 
-    // Array to store student data
-    Student[] public students;
+    function getStudent(uint256 _id) public view returns (student memory) {
+        return studentMap[_id];
+    }
 
-    // Non-payable fallback function
+    function totalStudents() public view returns (uint256) {
+        return (PRN);
+    }
+
     fallback() external {
-        revert("This contract does not accept Ether");
-    }
-
-    // Function to add a new student
-    function addStudent(string memory _name, uint256 _age) public {
-        uint256 studentId = students.length + 1;
-        students.push(Student(studentId, _name, _age));
-    }
-
-    // Function to get the details of a specific student
-    function getStudent(uint256 _studentId) public view returns (uint256, string memory, uint256) {
-        require(_studentId > 0 && _studentId <= students.length, "Invalid student ID");
-        Student memory student = students[_studentId - 1];
-        return (student.id, student.name, student.age);
-    }
-
-    // Function to get the total number of students
-    function getNumberOfStudents() public view returns (uint256) {
-        return students.length;
-    }
+        addStudent("Unknown", "FE","CSE");}
 }
